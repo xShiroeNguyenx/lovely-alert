@@ -148,10 +148,10 @@ pnpm lint         # Biome lint + format check
 Publishing is **tag-driven** via GitHub Actions:
 
 ```bash
-# 1. add a changeset describing the change
+# 1. add a changeset describing the change (pick patch / minor / major)
 pnpm changeset
-# 2. bump versions + changelogs
-pnpm version
+# 2. bump versions + changelogs (NOTE: `run` — `pnpm version` is a built-in, not this script)
+pnpm run version-packages
 # 3. commit, then tag to publish
 git commit -am "Release" && git push
 git tag vX.Y.Z && git push origin vX.Y.Z   # → CI runs `pnpm release` → npm
