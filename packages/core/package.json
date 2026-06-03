@@ -1,6 +1,6 @@
 {
   "name": "lovely-alert",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A beautiful, modern, accessible, themeable alert / modal / toast library with a fresh, ergonomic API.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +23,9 @@
     "dark-mode"
   ],
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/lovely-alert.umd.cjs",
   "module": "./dist/lovely-alert.js",
   "types": "./dist/index.d.ts",

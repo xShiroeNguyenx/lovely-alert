@@ -1,5 +1,13 @@
 # lovely-alert-mcp
 
+## 0.1.1
+
+### Patch Changes
+
+- docs: add live demo links
+- Updated dependencies
+  - @lovely-alert/catalog@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

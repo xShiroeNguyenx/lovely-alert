@@ -1,5 +1,11 @@
 # @lovely-alert/catalog
 
+## 0.1.1
+
+### Patch Changes
+
+- docs: add live demo links
+
 ## 0.1.0
 
 ### Minor Changes

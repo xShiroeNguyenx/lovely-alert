@@ -1,6 +1,6 @@
 {
   "name": "lovely-alert-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server (stdio + HTTP) exposing LovelyAlert docs, examples and code generation so any AI assistant can reference the library.",
   "type": "module",
   "license": "MIT",
@@ -12,13 +12,22 @@
     "directory": "packages/mcp"
   },
   "bugs": "https://github.com/xShiroeNguyenx/lovely-alert/issues",
-  "keywords": ["mcp", "model-context-protocol", "alert", "lovely-alert", "ai", "code-generation"],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "alert",
+    "lovely-alert",
+    "ai",
+    "code-generation"
+  ],
   "bin": {
     "lovely-alert-mcp": "./dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit",
