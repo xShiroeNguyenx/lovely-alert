@@ -1,6 +1,6 @@
 {
   "name": "@lovely-alert/vue",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Vue bindings for lovely-alert (plugin + composable + re-exports).",
   "type": "module",
   "license": "MIT",

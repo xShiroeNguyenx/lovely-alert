@@ -1,25 +1,23 @@
 name: Release
 
+# Tag-driven publish: push a version tag and this publishes to npm.
+#   1. bump versions on main (e.g. `pnpm version`) and push
+#   2. git tag v0.1.0 && git push origin v0.1.0
 on:
   push:
-    branches: [main]
-
-concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+    tags:
+      - "v*.*.*"
+  workflow_dispatch: # allow a manual run from the Actions tab
 
 permissions:
-  contents: write # push the version commit + git tags
-  pull-requests: write # open / update the "Version Packages" PR
+  contents: read
   id-token: write # npm provenance
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # changesets needs full history
 
       - uses: pnpm/action-setup@v4
         with:
@@ -34,17 +32,10 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      # When changesets exist on main → opens/updates a "Version Packages" PR
-      # (runs `pnpm version`). When that PR is merged (no changesets left) →
-      # runs `pnpm release` (build + `changeset publish`) and pushes git tags.
-      - name: Create Release PR or publish to npm
-        uses: changesets/action@v1
-        with:
-          version: pnpm version
-          publish: pnpm release
-          commit: "chore: release packages"
-          title: "chore: release packages"
+      # pnpm publish rewrites `workspace:*` → real ranges, skips private packages
+      # (docs) and any version already on the registry.
+      - name: Build + publish to npm
+        run: pnpm release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"

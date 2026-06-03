@@ -18,7 +18,7 @@
     "format": "biome format --write .",
     "changeset": "changeset",
     "version": "changeset version && node scripts/sync-version.mjs && pnpm install --lockfile-only",
-    "release": "pnpm build && changeset publish",
+    "release": "pnpm build && pnpm -r publish --access public --no-git-checks",
     "clean": "pnpm -r exec rimraf dist .astro && rimraf node_modules"
   },
   "devDependencies": {

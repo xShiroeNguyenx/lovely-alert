@@ -1,6 +1,6 @@
 {
   "name": "@lovely-alert/react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React bindings for lovely-alert (useAlert hook + re-exports).",
   "type": "module",
   "license": "MIT",
