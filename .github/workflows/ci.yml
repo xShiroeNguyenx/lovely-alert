@@ -26,14 +26,16 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # Build first: react/vue/mcp typecheck against `lovely-alert`'s built
+      # types (dist/index.d.ts), so dist must exist before `pnpm typecheck`.
+      - name: Build
+        run: pnpm build
+
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Test
         run: pnpm test
-
-      - name: Build
-        run: pnpm build
 
       - name: Dist check (bundle-size budget + UMD smoke)
         run: pnpm check:dist
