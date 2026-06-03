@@ -2,7 +2,7 @@
 
 > A beautiful, modern, accessible, themeable alert / modal / toast library with a fresh, ergonomic API — plus an MCP server so any AI assistant can reference it and generate code.
 
-[![CI](https://github.com/nguyensonkhanh/lovely-alert/actions/workflows/ci.yml/badge.svg)](https://github.com/nguyensonkhanh/lovely-alert/actions/workflows/ci.yml)
+[![CI](https://github.com/xShiroeNguyenx/lovely-alert/actions/workflows/ci.yml/badge.svg)](https://github.com/xShiroeNguyenx/lovely-alert/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 LovelyAlert is its own independent product — a vanilla-TS core with **zero runtime

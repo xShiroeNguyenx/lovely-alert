@@ -5,13 +5,13 @@
   "type": "module",
   "license": "MIT",
   "author": "Nguyễn Sơn Khánh <nguyenson.khanh4e@gmail.com>",
-  "homepage": "https://github.com/nguyensonkhanh/lovely-alert#readme",
+  "homepage": "https://github.com/xShiroeNguyenx/lovely-alert#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nguyensonkhanh/lovely-alert.git",
+    "url": "git+https://github.com/xShiroeNguyenx/lovely-alert.git",
     "directory": "packages/core"
   },
-  "bugs": "https://github.com/nguyensonkhanh/lovely-alert/issues",
+  "bugs": "https://github.com/xShiroeNguyenx/lovely-alert/issues",
   "keywords": [
     "alert",
     "modal",
