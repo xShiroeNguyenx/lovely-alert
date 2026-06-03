@@ -1,0 +1,54 @@
+---
+import { categories, getExamplesByCategory } from '@lovely-alert/catalog'
+import RunExample from '../components/RunExample'
+import Base from '../layouts/Base.astro'
+---
+
+<Base title="Examples · LovelyAlert">
+  <h1>Examples</h1>
+  <p class="intro">
+    Every example below comes from the shared catalog — the same source the MCP server and tests
+    use, so docs never drift. Press <strong>Run</strong> to see it live.
+  </p>
+
+  {
+    categories.map((category) => {
+      const items = getExamplesByCategory(category)
+      if (items.length === 0) return null
+      return (
+        <section class="group">
+          <h2 class="group-title">{category}</h2>
+          <div class="grid">
+            {items.map((example) => (
+              <article class="card">
+                <div class="card-head">
+                  <h3>{example.title}</h3>
+                  <RunExample code={example.code} client:visible />
+                </div>
+                <p class="desc">{example.description}</p>
+                <pre><code>{example.code}</code></pre>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    })
+  }
+</Base>
+
+<style>
+  h1 { margin-bottom: 0.25rem; }
+  .intro { color: var(--muted); margin-bottom: 2rem; }
+  .group { margin-bottom: 2.5rem; }
+  .group-title { text-transform: capitalize; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .card-head h3 { margin: 0; font-size: 1.05rem; }
+  .desc { color: var(--muted); margin: 0.4rem 0 0.75rem; font-size: 0.95rem; }
+  .card pre { margin: 0; }
+  :global(.run-btn) {
+    border: none; background: var(--primary); color: #fff; font-weight: 700;
+    padding: 0.45rem 0.9rem; border-radius: 10px; cursor: pointer; white-space: nowrap;
+  }
+</style>

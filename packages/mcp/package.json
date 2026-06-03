@@ -1,0 +1,36 @@
+{
+  "name": "lovely-alert-mcp",
+  "version": "0.0.0",
+  "description": "MCP server (stdio + HTTP) exposing LovelyAlert docs, examples and code generation so any AI assistant can reference the library.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Nguyễn Sơn Khánh <nguyenson.khanh4e@gmail.com>",
+  "homepage": "https://github.com/nguyensonkhanh/lovely-alert#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyensonkhanh/lovely-alert.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": "https://github.com/nguyensonkhanh/lovely-alert/issues",
+  "keywords": ["mcp", "model-context-protocol", "alert", "lovely-alert", "ai", "code-generation"],
+  "bin": {
+    "lovely-alert-mcp": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/cli.js"
+  },
+  "dependencies": {
+    "@lovely-alert/catalog": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.0",
+    "typescript": "5.6.3"
+  }
+}

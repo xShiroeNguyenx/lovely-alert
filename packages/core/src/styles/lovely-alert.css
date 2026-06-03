@@ -1,0 +1,743 @@
+/*
+ * LovelyAlert core styles. Auto-injected once at runtime (see styleInjector.ts),
+ * so CDN/UMD users and AI-generated snippets work with no extra CSS import.
+ * Phase 1: structural layout + light/dark/auto design tokens + base animations.
+ * Phase 2 expands the theme matrix and animated SVG icons.
+ */
+
+.la-container {
+  /* ----- design tokens (light) ----- */
+  --la-bg: #ffffff;
+  --la-fg: #0f172a;
+  --la-muted: #64748b;
+  --la-border: #e2e8f0;
+  --la-popup-radius: 16px;
+  --la-popup-ring: rgba(15, 23, 42, 0.08);
+  --la-popup-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 28px -8px rgba(15, 23, 42, 0.18), 0
+    32px 64px -24px rgba(15, 23, 42, 0.22);
+  --la-backdrop: rgba(15, 23, 42, 0.4);
+  --la-primary: #2563eb;
+  --la-primary-fg: #ffffff;
+  --la-neutral: #f1f5f9;
+  --la-neutral-fg: #334155;
+  --la-danger: #dc2626;
+  --la-success: #16a34a;
+  --la-error: #dc2626;
+  --la-warning: #d97706;
+  --la-info: #2563eb;
+  --la-question: #7c3aed;
+  --la-input-bg: #ffffff;
+  --la-input-border: #cbd5e1;
+  --la-focus-ring: 0 0 0 3px color-mix(in srgb, var(--la-primary) 32%, transparent);
+
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  padding: 1rem;
+  box-sizing: border-box;
+  background: var(--la-backdrop);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.la-container.la-shown {
+  opacity: 1;
+}
+.la-container.la-hiding {
+  opacity: 0;
+}
+.la-container.la-no-backdrop {
+  background: transparent;
+  pointer-events: none;
+}
+.la-container.la-no-backdrop .la-popup {
+  pointer-events: auto;
+}
+
+/* ----- dark tokens ----- */
+.la-container[data-la-theme="dark"] {
+  --la-bg: #1a2233;
+  --la-fg: #f1f5f9;
+  --la-muted: #94a3b8;
+  --la-border: #334155;
+  --la-popup-ring: rgba(255, 255, 255, 0.06);
+  --la-popup-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px -12px rgba(0, 0, 0, 0.6), 0 40px 72px
+    -28px rgba(0, 0, 0, 0.7);
+  --la-backdrop: rgba(2, 6, 23, 0.62);
+  --la-primary: #3b82f6;
+  --la-neutral: #334155;
+  --la-neutral-fg: #e2e8f0;
+  --la-input-bg: #0f172a;
+  --la-input-border: #3a4760;
+}
+
+/* ----- auto: follow the OS ----- */
+@media (prefers-color-scheme: dark) {
+  .la-container[data-la-theme="auto"] {
+    --la-bg: #1a2233;
+    --la-fg: #f1f5f9;
+    --la-muted: #94a3b8;
+    --la-border: #334155;
+    --la-popup-ring: rgba(255, 255, 255, 0.06);
+    --la-popup-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px -12px rgba(0, 0, 0, 0.6), 0 40px
+      72px -28px rgba(0, 0, 0, 0.7);
+    --la-backdrop: rgba(2, 6, 23, 0.62);
+    --la-primary: #3b82f6;
+    --la-neutral: #334155;
+    --la-neutral-fg: #e2e8f0;
+    --la-input-bg: #0f172a;
+    --la-input-border: #3a4760;
+  }
+}
+
+/* ----- positioning (15 values via data-la-position) ----- */
+.la-container[data-la-position^="top"] {
+  align-items: flex-start;
+}
+.la-container[data-la-position^="center"] {
+  align-items: center;
+}
+.la-container[data-la-position^="bottom"] {
+  align-items: flex-end;
+}
+.la-container[data-la-position$="start"],
+.la-container[data-la-position$="left"] {
+  justify-content: flex-start;
+}
+.la-container[data-la-position$="end"],
+.la-container[data-la-position$="right"] {
+  justify-content: flex-end;
+}
+.la-container[data-la-position="top"],
+.la-container[data-la-position="center"],
+.la-container[data-la-position="bottom"] {
+  justify-content: center;
+}
+
+/* ----- popup ----- */
+.la-popup {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 32em;
+  max-width: 100%;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: 2rem;
+  background: var(--la-bg);
+  color: var(--la-fg);
+  border-radius: var(--la-popup-radius);
+  box-shadow: 0 0 0 1px var(--la-popup-ring), var(--la-popup-shadow);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/*
+ * Modal layout (NOT toasts): a left-aligned dialog — small icon badge top-left,
+ * title + body in a right-hand column, full-width inputs/footer, and buttons
+ * pinned bottom-right. Deliberately distinct from the centered icon-ring look.
+ */
+.la-popup:not(.la-toast) {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  column-gap: 1.1rem;
+  row-gap: 0.7rem;
+  text-align: start;
+}
+/* Default: children span the full width; icon + title/body opt into the columns. */
+.la-popup:not(.la-toast) > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.la-popup:not(.la-toast) > .la-title,
+.la-popup:not(.la-toast) > .la-html {
+  grid-column: 2;
+}
+.la-popup:not(.la-toast) > .la-icon {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 14px;
+  background: var(--la-icon-color);
+  box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--la-icon-color) 55%, transparent);
+}
+.la-popup:not(.la-toast) > .la-icon .la-icon-svg {
+  width: 56%;
+  height: 56%;
+}
+.la-popup:not(.la-toast) .la-actions {
+  justify-content: flex-end;
+}
+
+.la-container.la-shown .la-popup {
+  animation: la-pop-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.la-container.la-hiding .la-popup {
+  animation: la-pop-out 0.18s ease-in both;
+}
+
+@keyframes la-pop-in {
+  from {
+    transform: translateY(8px) scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes la-pop-out {
+  from {
+    transform: none;
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+}
+
+/* ----- close button ----- */
+.la-close {
+  position: absolute;
+  top: 0.85rem;
+  inset-inline-end: 0.85rem;
+  border: none;
+  background: transparent;
+  color: var(--la-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 2rem;
+  height: 2rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.la-close:hover {
+  color: var(--la-fg);
+  background: color-mix(in srgb, var(--la-fg) 8%, transparent);
+}
+
+/* ----- icon (animated inline SVG). Per-type accent is exposed as --la-icon-color;
+   modals render it as a filled squircle badge, toasts as a plain colored glyph. ----- */
+.la-icon {
+  --la-icon-color: var(--la-primary);
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+.la-icon[data-la-icon="success"] {
+  --la-icon-color: var(--la-success);
+}
+.la-icon[data-la-icon="error"] {
+  --la-icon-color: var(--la-error);
+}
+.la-icon[data-la-icon="warning"] {
+  --la-icon-color: var(--la-warning);
+}
+.la-icon[data-la-icon="info"] {
+  --la-icon-color: var(--la-info);
+}
+.la-icon[data-la-icon="question"] {
+  --la-icon-color: var(--la-question);
+}
+.la-icon-svg {
+  width: 62%;
+  height: 62%;
+  overflow: visible;
+}
+/* Visible by default (so reduced-motion / animation:false still shows the glyph). */
+.la-icon-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.la-icon-dot {
+  transform: scale(1);
+  transform-origin: center;
+}
+.la-container.la-shown .la-icon .la-icon-draw {
+  animation: la-icon-draw 0.5s 0.15s ease backwards;
+}
+.la-container.la-shown .la-icon .la-icon-draw-2 {
+  animation-delay: 0.33s;
+}
+.la-container.la-shown .la-icon .la-icon-dot {
+  animation: la-icon-pop 0.3s 0.42s ease backwards;
+}
+@keyframes la-icon-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes la-icon-pop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.la-image {
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+/* ----- text ----- */
+.la-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--la-fg);
+}
+.la-html {
+  margin: 0;
+  color: var(--la-muted);
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+/* ----- input ----- */
+.la-input,
+.la-input-label {
+  width: 100%;
+}
+.la-input-label {
+  display: block;
+  text-align: start;
+  font-size: 0.9rem;
+  color: var(--la-muted);
+  margin-bottom: 0.35rem;
+}
+.la-input {
+  box-sizing: border-box;
+  padding: 0.7rem 0.9rem;
+  font: inherit;
+  color: var(--la-fg);
+  background: var(--la-input-bg);
+  border: 1.5px solid var(--la-input-border);
+  border-radius: 10px;
+  outline: none;
+}
+.la-input:focus {
+  box-shadow: var(--la-focus-ring);
+  border-color: var(--la-primary);
+}
+textarea.la-input {
+  min-height: 6rem;
+  resize: vertical;
+}
+.la-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: start;
+}
+.la-radio,
+.la-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+}
+.la-radio input,
+.la-checkbox input {
+  width: auto;
+  margin: 0;
+  accent-color: var(--la-primary);
+}
+.la-otp {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.la-otp-box {
+  width: 2.8rem;
+  height: 3.2rem;
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--la-fg);
+  background: var(--la-input-bg);
+  border: 1.5px solid var(--la-input-border);
+  border-radius: 10px;
+  outline: none;
+}
+.la-otp-box:focus {
+  border-color: var(--la-primary);
+  box-shadow: var(--la-focus-ring);
+}
+.la-rating {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 2rem;
+}
+.la-star {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--la-border);
+  line-height: 1;
+  padding: 0;
+}
+.la-star-on {
+  color: var(--la-warning);
+}
+.la-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.4rem;
+  background: var(--la-input-bg);
+  border: 1.5px solid var(--la-input-border);
+  border-radius: 10px;
+}
+.la-tags .la-input {
+  flex: 1;
+  min-width: 6rem;
+  border: none;
+  padding: 0.3rem;
+  background: transparent;
+}
+.la-tags .la-input:focus {
+  box-shadow: none;
+}
+.la-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--la-primary);
+  color: var(--la-primary-fg);
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+.la-tag button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.la-validation {
+  display: none;
+  width: 100%;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  background: color-mix(in srgb, var(--la-danger) 14%, transparent);
+  color: var(--la-danger);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  text-align: start;
+}
+.la-validation.la-shown {
+  display: flex;
+}
+
+/* ----- actions / buttons ----- */
+.la-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+.la-actions button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+.la-styled button {
+  padding: 0.6rem 1.3rem;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: filter 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+.la-styled button:focus-visible {
+  box-shadow: var(--la-focus-ring);
+  outline: none;
+}
+.la-styled button:hover {
+  filter: brightness(1.05);
+}
+.la-styled button:active {
+  filter: brightness(0.97);
+  transform: translateY(1px);
+}
+.la-styled .la-confirm {
+  background: var(--la-primary);
+  color: var(--la-primary-fg);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.la-styled .la-confirm.la-danger {
+  background: var(--la-danger);
+}
+.la-styled .la-deny {
+  background: var(--la-danger);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.la-styled .la-cancel {
+  background: var(--la-neutral);
+  color: var(--la-neutral-fg);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--la-fg) 10%, transparent);
+}
+.la-styled .la-cancel:hover {
+  filter: none;
+  background: color-mix(in srgb, var(--la-neutral) 80%, var(--la-fg) 6%);
+}
+
+button.la-loading {
+  color: transparent !important;
+  position: relative;
+  pointer-events: none;
+}
+button.la-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  color: var(--la-primary-fg);
+  animation: la-spin 0.6s linear infinite;
+}
+@keyframes la-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.la-footer {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--la-border);
+  color: var(--la-muted);
+  font-size: 0.9rem;
+}
+
+/* visually-hidden live region for screen-reader announcements */
+.la-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ----- toast ----- */
+.la-toast-container {
+  background: transparent;
+  pointer-events: none;
+  padding: 1rem;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.la-toast-container[data-la-position^="top"] {
+  justify-content: flex-start;
+}
+.la-toast-container[data-la-position^="bottom"] {
+  justify-content: flex-end;
+}
+.la-toast-container[data-la-position$="end"] {
+  align-items: flex-end;
+}
+.la-toast-container[data-la-position$="start"] {
+  align-items: flex-start;
+}
+.la-toast-container[data-la-position="top"],
+.la-toast-container[data-la-position="bottom"] {
+  align-items: center;
+}
+.la-toast.la-hiding {
+  animation: la-pop-out 0.18s ease-in both;
+}
+/*
+ * Toast layout: icon on the left (spanning both text rows), bold title above a
+ * muted body on the right, close button tucked in the corner. Surface stays
+ * neutral (white in light / dark in dark mode) with a slight translucency.
+ */
+.la-toast {
+  width: auto;
+  max-width: 24rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 0.85rem;
+  row-gap: 0.1rem;
+  text-align: start;
+  padding: 0.9rem 1.1rem;
+  border-radius: 4px;
+  pointer-events: auto;
+  /* ~85% opaque + frosted blur, so the backdrop shows through a touch. */
+  background: color-mix(in srgb, var(--la-bg) 85%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+}
+.la-toast .la-icon {
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  align-self: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: none;
+  background: transparent;
+  color: var(--la-icon-color);
+  margin: 0;
+}
+.la-toast .la-icon-svg {
+  width: 100%;
+  height: 100%;
+}
+.la-toast .la-title {
+  grid-column: 2;
+  font-size: 0.98rem;
+}
+.la-toast .la-html {
+  grid-column: 2;
+  font-size: 0.88rem;
+}
+/* Validation / action buttons (rare on toasts) drop to a full-width row. */
+.la-toast .la-validation,
+.la-toast .la-actions {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+/* Close button in the corner; reserve text inset only when it's present. */
+.la-toast .la-close {
+  top: 0.5rem;
+  inset-inline-end: 0.5rem;
+  font-size: 1.25rem;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.la-toast:has(.la-close) .la-title,
+.la-toast:has(.la-close) .la-html {
+  padding-inline-end: 1.1rem;
+}
+
+/* ----- timer progress bar ----- */
+.la-timer-bar {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--la-primary);
+  transform-origin: left;
+  animation: la-timer-bar 3s linear forwards;
+}
+.la-timer-bar.la-paused {
+  animation-play-state: paused;
+}
+@keyframes la-timer-bar {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* ----- progress steps ----- */
+.la-steps {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.la-step {
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  background: var(--la-neutral);
+  color: var(--la-neutral-fg);
+}
+.la-step-active {
+  background: var(--la-primary);
+  color: var(--la-primary-fg);
+}
+
+/* ----- grow ----- */
+.la-popup.la-grow-row {
+  width: auto;
+  min-width: 28em;
+}
+.la-popup.la-grow-column {
+  width: 32em;
+  min-height: 60vh;
+  justify-content: center;
+}
+.la-popup.la-grow-fullscreen {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0;
+  justify-content: center;
+}
+
+/* ----- draggable ----- */
+.la-popup.la-draggable {
+  user-select: none;
+}
+.la-popup.la-draggable .la-title {
+  touch-action: none;
+}
+
+/* ----- theme variants (layered on the light/dark tokens) ----- */
+.la-container[data-la-theme="minimal"] .la-popup {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.12);
+  border: 1px solid var(--la-border);
+}
+.la-container[data-la-theme="borderless"] {
+  --la-backdrop: rgba(15, 23, 42, 0.2);
+}
+.la-container[data-la-theme="borderless"] .la-popup {
+  box-shadow: none;
+  border: 1px solid var(--la-border);
+}
+
+/* ----- respect reduced motion ----- */
+@media (prefers-reduced-motion: reduce) {
+  .la-container,
+  .la-container * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

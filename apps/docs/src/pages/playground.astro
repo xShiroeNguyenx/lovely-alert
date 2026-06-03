@@ -1,0 +1,41 @@
+---
+import Playground from '../components/Playground'
+import Base from '../layouts/Base.astro'
+---
+
+<Base title="Playground · LovelyAlert">
+  <h1>Playground</h1>
+  <p class="intro">
+    Write code with the <code>la</code> API and run it live. Styles auto-inject — no setup needed.
+  </p>
+  <Playground client:load />
+</Base>
+
+<style>
+  .intro { color: var(--muted); margin-bottom: 1.25rem; }
+  :global(.pg) { display: flex; flex-direction: column; gap: 0.75rem; }
+  :global(.pg-editor) {
+    width: 100%;
+    min-height: 320px;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+    color: var(--code-fg);
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
+  }
+  :global(.pg-actions) { display: flex; gap: 0.6rem; }
+  :global(.pg-actions button) {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--fg);
+    font-weight: 700;
+    padding: 0.6rem 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  :global(.pg-run) { background: var(--primary) !important; color: #fff !important; border: none !important; }
+</style>

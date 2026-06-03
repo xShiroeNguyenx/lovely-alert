@@ -1,0 +1,25 @@
+{
+  "name": "@lovely-alert/docs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Docs + live playground for LovelyAlert (Astro + React islands).",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "typecheck": "node -e \"process.exit(0)\""
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.6.3",
+    "@lovely-alert/catalog": "workspace:*",
+    "astro": "^4.16.18",
+    "lovely-alert": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1"
+  }
+}

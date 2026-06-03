@@ -1,0 +1,147 @@
+---
+interface Props {
+  title?: string
+}
+const { title = 'LovelyAlert' } = Astro.props
+// Normalize the deploy base ("/" locally, "/<repo>" on GitHub Pages) to no trailing
+// slash, then build links as `${base}/segment` so they resolve under any subpath.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+---
+
+<!doctype html>
+<html lang="en" data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="LovelyAlert — a beautiful, modern, accessible alert/modal/toast library." />
+    <title>{title}</title>
+    <script is:inline>
+      // Apply the saved docs theme before paint to avoid a flash.
+      (() => {
+        const saved = localStorage.getItem('la-docs-theme') || 'auto'
+        document.documentElement.dataset.theme = saved
+      })()
+    </script>
+  </head>
+  <body>
+    <header class="nav">
+      <a class="brand" href={`${base}/`}>💖 LovelyAlert</a>
+      <nav>
+        <a href={`${base}/`}>Home</a>
+        <a href={`${base}/examples`}>Examples</a>
+        <a href={`${base}/playground`}>Playground</a>
+        <a href="https://github.com" rel="noreferrer">GitHub</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span id="theme-label">auto</span>
+      </button>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="footer">
+      <p>LovelyAlert · MIT · a beautiful, modern alert, toast &amp; modal library + MCP server.</p>
+    </footer>
+
+    <script is:inline>
+      const order = ['auto', 'light', 'dark']
+      const btn = document.getElementById('theme-toggle')
+      const label = document.getElementById('theme-label')
+      const sync = () => {
+        const t = document.documentElement.dataset.theme || 'auto'
+        if (label) label.textContent = t
+      }
+      sync()
+      btn?.addEventListener('click', () => {
+        const current = document.documentElement.dataset.theme || 'auto'
+        const next = order[(order.indexOf(current) + 1) % order.length]
+        document.documentElement.dataset.theme = next
+        localStorage.setItem('la-docs-theme', next)
+        sync()
+      })
+    </script>
+
+    <style is:global>
+      :root {
+        --bg: #ffffff;
+        --fg: #1f2733;
+        --muted: #5b6470;
+        --card: #f7f8fa;
+        --border: #e4e7ec;
+        --primary: #3b82f6;
+        --code-bg: #0f1729;
+        --code-fg: #e6e9f0;
+      }
+      :root[data-theme='dark'] {
+        --bg: #0d1117;
+        --fg: #e7ebf2;
+        --muted: #9aa4b2;
+        --card: #161c28;
+        --border: #2b3344;
+        --code-bg: #05080f;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root[data-theme='auto'] {
+          --bg: #0d1117;
+          --fg: #e7ebf2;
+          --muted: #9aa4b2;
+          --card: #161c28;
+          --border: #2b3344;
+          --code-bg: #05080f;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        line-height: 1.6;
+      }
+      a { color: var(--primary); text-decoration: none; }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        background: color-mix(in srgb, var(--bg) 88%, transparent);
+        backdrop-filter: blur(8px);
+        z-index: 10;
+      }
+      .brand { font-weight: 800; font-size: 1.15rem; color: var(--fg); }
+      .nav nav { display: flex; gap: 1rem; margin-left: auto; }
+      .nav nav a { color: var(--muted); font-weight: 600; }
+      .nav nav a:hover { color: var(--fg); }
+      .theme-toggle {
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--fg);
+        border-radius: 999px;
+        padding: 0.4rem 0.9rem;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 600;
+      }
+      main { max-width: 980px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+      .footer {
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        text-align: center;
+        padding: 2rem 1rem;
+        font-size: 0.9rem;
+      }
+      pre {
+        background: var(--code-bg);
+        color: var(--code-fg);
+        padding: 1rem;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-size: 0.85rem;
+      }
+      code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; }
+    </style>
+  </body>
+</html>

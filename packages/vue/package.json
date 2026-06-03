@@ -1,0 +1,40 @@
+{
+  "name": "@lovely-alert/vue",
+  "version": "0.0.0",
+  "description": "Vue bindings for lovely-alert (plugin + composable + re-exports).",
+  "type": "module",
+  "license": "MIT",
+  "author": "Nguyễn Sơn Khánh <nguyenson.khanh4e@gmail.com>",
+  "homepage": "https://github.com/nguyensonkhanh/lovely-alert#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyensonkhanh/lovely-alert.git",
+    "directory": "packages/vue"
+  },
+  "bugs": "https://github.com/nguyensonkhanh/lovely-alert/issues",
+  "keywords": ["alert", "modal", "toast", "vue", "lovely-alert"],
+  "sideEffects": false,
+  "files": ["dist"],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "vue": ">=3"
+  },
+  "dependencies": {
+    "lovely-alert": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "5.6.3",
+    "vue": "^3.5.13"
+  }
+}

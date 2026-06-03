@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LovelyAlert — dev playground</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        background: #0b0f1a;
+        color: #e6e9f0;
+        display: grid;
+        place-items: center;
+      }
+      main { width: min(680px, 92vw); padding: 2.5rem 0; text-align: center; }
+      h1 { margin: 0 0 0.25rem; font-size: 2rem; }
+      p.sub { margin: 0 0 1.75rem; color: #9aa4b2; }
+      .grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      button {
+        font: inherit;
+        font-weight: 600;
+        padding: 0.85rem 1rem;
+        border-radius: 12px;
+        border: 1px solid #2b3344;
+        background: #161c28;
+        color: #e6e9f0;
+        cursor: pointer;
+      }
+      button:hover { border-color: #3b82f6; }
+      .bar { margin-top: 1.5rem; display: flex; gap: 0.6rem; align-items: center; justify-content: center; }
+      code { background: #1b2233; padding: 0.15em 0.45em; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>LovelyAlert</h1>
+      <p class="sub">Phase 1 dev playground — the new modern API (<code>la.*</code>)</p>
+      <div class="grid">
+        <button id="btn-success">success()</button>
+        <button id="btn-error">error()</button>
+        <button id="btn-warning">warning()</button>
+        <button id="btn-info">info()</button>
+        <button id="btn-question">question()</button>
+        <button id="btn-confirm">confirm() · danger</button>
+        <button id="btn-prompt">prompt() · validate</button>
+        <button id="btn-builder">build()…</button>
+        <button id="btn-draggable">draggable</button>
+        <button id="btn-fullscreen">grow: fullscreen</button>
+      </div>
+      <div class="bar">
+        <span>theme:</span>
+        <button id="btn-theme"><span id="theme-label">auto</span></button>
+      </div>
+    </main>
+    <script type="module" src="/dev/main.ts"></script>
+  </body>
+</html>

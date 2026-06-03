@@ -1,0 +1,67 @@
+---
+import { examples } from '@lovely-alert/catalog'
+import RunExample from '../components/RunExample'
+import Base from '../layouts/Base.astro'
+
+const features = [
+  [
+    '🎨',
+    'Light / dark / auto',
+    'Design-token theming that follows the OS, plus a runtime theme builder.',
+  ],
+  ['♿', 'Accessible', 'WAI-ARIA roles, focus trap, scroll lock, screen-reader announce and RTL.'],
+  ['🧩', 'Fresh modern API', 'Convenience methods, a fluent builder and a low-level open().'],
+  ['🔤', '18 input types', 'Plus rich extras: OTP, rating, tags, color — with async validation.'],
+  ['🔔', 'Stacking toasts', 'Non-blocking toasts that stack, with timers and progress bars.'],
+  ['✨', 'Delight', 'Confetti, animated icons and optional sound cues.'],
+]
+const demo = examples.find((e) => e.id === 'effects-confetti')?.code ?? ''
+---
+
+<Base title="LovelyAlert — modern alerts, toasts & modals">
+  <section class="hero">
+    <h1>Beautiful alerts, toasts &amp; modals</h1>
+    <p class="lead">
+      A beautiful, modern, accessible, themeable alert, toast &amp; modal library — with a fresh
+      API and an MCP server so any AI assistant can generate code for it.
+    </p>
+    <div class="cta">
+      <RunExample code={demo} client:load />
+      <a class="btn" href="/playground">Open playground →</a>
+      <a class="btn ghost" href="/examples">Browse examples</a>
+    </div>
+    <pre><code>npm install lovely-alert</code></pre>
+  </section>
+
+  <section class="features">
+    {features.map(([icon, title, body]) => (
+      <article class="feature">
+        <div class="feature-icon">{icon}</div>
+        <h3>{title}</h3>
+        <p>{body}</p>
+      </article>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .hero { text-align: center; padding: 2rem 0 3rem; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0 0 0.5rem; }
+  .lead { color: var(--muted); font-size: 1.15rem; max-width: 640px; margin: 0 auto 1.75rem; }
+  .cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .btn {
+    display: inline-flex; align-items: center; padding: 0.7rem 1.2rem;
+    border-radius: 12px; font-weight: 700; background: var(--primary); color: #fff;
+  }
+  .btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+  .hero pre { display: inline-block; text-align: left; }
+  .features { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .feature { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem; }
+  .feature-icon { font-size: 1.8rem; }
+  .feature h3 { margin: 0.5rem 0 0.35rem; }
+  .feature p { margin: 0; color: var(--muted); }
+  :global(.run-btn) {
+    border: none; background: var(--primary); color: #fff; font-weight: 700;
+    padding: 0.7rem 1.2rem; border-radius: 12px; cursor: pointer;
+  }
+</style>
