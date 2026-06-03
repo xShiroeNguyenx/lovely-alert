@@ -2,6 +2,11 @@
 
 > A beautiful, modern, accessible, themeable alert / modal / toast library with a fresh, ergonomic API.
 
+[![npm](https://img.shields.io/npm/v/lovely-alert?color=%232563eb)](https://www.npmjs.com/package/lovely-alert)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+
+🎮 **[Live demo & playground →](https://xshiroenguyenx.github.io/lovely-alert/)**
+
 Vanilla TypeScript, **zero runtime dependencies**. Styles auto-inject on first use, so
 CDN/UMD consumers and AI-generated snippets render correctly with no extra CSS import.
 
